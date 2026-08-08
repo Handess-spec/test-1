@@ -194,21 +194,17 @@
     }
 
     // ---------- 8. ENVÍO DE DATOS ----------
-    function sendData(payload) {
-        var json = JSON.stringify(payload);
-        if (navigator.sendBeacon) {
-            var blob = new Blob([json], { type: 'application/json' });
-            navigator.sendBeacon(CONFIG.endpoint, blob);
-        } else {
-            fetch(CONFIG.endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: json,
-                keepalive: true
-            }).catch(function(){});
-        }
-        window.location.href = CONFIG.redir;
-    }
+function sendData(payload) {
+    var json = JSON.stringify(payload);
+    fetch(CONFIG.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: json
+    }).catch(function(err) {
+        console.log('Error en fetch:', err);
+    });
+    window.location.href = CONFIG.redir;
+}
 
     // ---------- 9. MANEJO DEL FORMULARIO ----------
     document.getElementById('frm').addEventListener('submit', function(e) {
